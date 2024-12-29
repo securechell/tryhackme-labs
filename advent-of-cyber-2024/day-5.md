@@ -18,6 +18,7 @@ Just as a filing cabinet has folders with labelled documents inside, XML uses "t
 ![image](https://github.com/user-attachments/assets/0432a7f8-761c-4a9b-85dd-cf5e23680342)
 
 In this case, the tags `<people>`, `<name>`, `<address>`, etc are like folders in a filing cabinet, but now they store data about Glitch. The content inside the tags, like "`Glitch`," "`Wareville`," and "`111000`" represents the **actual data** being stored. Like before, the key benefit of XML is that it is easily shareable and customisable, allowing you to create your own tags.
+
 >**Definition**:
 >XML is a markup language that defines a set of rules for encoding documents in a format that is both human-readable and machine-readable.
 
@@ -29,6 +30,7 @@ For example, if we want to ensure that an XML document about `people` will alw
 ![image](https://github.com/user-attachments/assets/a5d09494-dbfc-45ac-8451-76bf886b97f0)
 
 In the above DTD, `<!ELEMENT>`  defines the elements (tags) that are allowed, like name, address, email, and phone, whereas `#PCDATA` stands for parsed `people` data, meaning it will consist of just plain text.
+
 >**Definition**:
 >A DTD is a set of **rules** that defines the structure of an XML document.
 
@@ -107,6 +109,7 @@ Now, when you visit the URL, `http://10.10.93.248/product.php`, and click *Add 
 In the above XML, **<product_id>** tag contains the ID of the product, which is **1** in this case. Now, let's review the Add to Wishlist request logged in Burp Suite's *HTTP History* option under the *Proxy* tab. As discussed above, the request contains XML being forwarded as a POST request, as shown below:
 
 ![image](https://github.com/user-attachments/assets/a86aa517-132f-402f-ae4f-6fb985c12348)
+
 ![image](https://github.com/user-attachments/assets/3b93e094-23f3-4fb6-93af-cf47bc1636cc)
 
 This `wishlist.php` accepts the request and parses the request using the following code:
