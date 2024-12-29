@@ -24,14 +24,18 @@ These popular sites have been around for a long time. However, historically, the
 2. Once downloaded, navigate to the /root directory. Locate the file named `download.zip`, right-click on it, and select **Extract To**. In the dialog window, click the **Extract** button to complete the extraction.
 
 3. You'll now see two extracted two files: `song.mp3` and `somg.mp3`. In Terminal run the `file` command on each one.
+
 ![image](https://github.com/user-attachments/assets/208d3fdb-77cb-41d4-8da2-d4702dd11aaa)
+
 - `song.mp3`: Doesn't seem suspicious, according to the output. As expected, this is just an MP3 file.
 - `somg.mp3`: From the filename alone, we can tell something is not right! Running the `file` command tells us that instead of an MP3, the file is an "MS Windows shortcut", also known as a `.lnk` file. This file type is used in Windows to link to another file, folder, or application. These shortcuts can also be used to run commands!
 
 4. There are multiple ways to inspect `.lnk`  files to reveal the embedded commands and attributes. For this room we'll use **ExifTool**. Go to Terminal and type: `exiftool somg.mp3`
+
 ![image](https://github.com/user-attachments/assets/ddcb6694-b162-4342-8ad8-d36d6848586b)
 
 Look through the output to locate the command used as a shortcut in the `somg.mp3` file. If you scroll down through the output, you should see a PowerShell command.
+
 ![image](https://github.com/user-attachments/assets/fc18c69b-ece2-4056-856d-a82ef51915bb)
 
 What this PowerShell command does:
@@ -40,6 +44,7 @@ What this PowerShell command does:
 - Once downloaded, the script is executed with PowerShell using the `iex` command, which triggers the downloaded `s.ps1` file.
 
 If you visit the contents of the file to be downloaded using your browser (`https://raw.githubusercontent.com/MM-WarevilleTHM/IS/refs/heads/main/IS.ps1`), you will see just how lucky we are that we are not currently using Windows:
+
 ![image](https://github.com/user-attachments/assets/07c03976-a330-4407-a4d2-f72790738b83)
 
 The script is designed to collect highly sensitive information from the victim's system, such as cryptocurrency wallets and saved browser credentials, and send it to an attacker's remote server.
@@ -56,9 +61,11 @@ There are many places where we can search for code. The most widely used is Gith
 To search effectively, we can look for unique parts of the code that we could use to search with. The more distinctive, the better. For this scenario, we have the string we've uncovered before that reads: **"Created by the one and only M.M."**
 
 1. Search for this on Github.com or by going directly to this link: https://github.com/search?q=%22Created+by+the+one+and+only+M.M.%22&type=issues.
+
 ![image](https://github.com/user-attachments/assets/98d88e7c-0149-4c4c-8210-f8aa9240f8a9)
 
 2. You'll notice something interesting if you explore the pages in the search results. If you look through the search results, you can be able infer the malicious actor's identity based on information on the project's page and the GitHub Issues section.
+
 ![image](https://github.com/user-attachments/assets/b9eea057-ffd0-4726-a3f9-3e3819fd6795)
 
 Aha! Looks like this user has made a critical mistake. This is a classic case of **OPSEC failure**.
