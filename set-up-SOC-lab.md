@@ -73,8 +73,8 @@ Configuring data ingestion is an important part of Splunk. This allows for the d
 - `mv splunkforwarder /opt/`
 - `cd /opt/splunkforwarder`
 - `./bin/splunk start --accept-license`
-- Create admin username and password (I used same as before)
-- Got an error message:
+- Create admin username and password
+- Received an error message:
 ![THM - Setting up a SOC Lab (Splunk)-6](https://github.com/user-attachments/assets/0c3e661d-991a-4670-9d83-15d59f2cd76a)
 
 - By default, Splunk forwarder runs on port 8089, but that port was unavailable so I used port 8090.
