@@ -1,4 +1,4 @@
-# Day 9: Nine o'clock, make GRC fun, tell no one
+# Day 9: Nine o'clock, make GRC fun, tell no one.
 
 ### Introduction to GRC
 
@@ -72,5 +72,5 @@ Let's put this knowledge to the test!
 
 
 ### Answers
-1. What does GRC stand for? *Governance, Risk, and Compliance*.
-2. What is the flag you receive after performing the risk assessment? *THM{R15K_M4N4G3D}*.
+1. What does GRC stand for? **Governance, Risk, and Compliance**.
+2. What is the flag you receive after performing the risk assessment? **THM{R15K_M4N4G3D}**.
