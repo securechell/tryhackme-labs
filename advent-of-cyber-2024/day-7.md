@@ -18,6 +18,7 @@ McSkidy recalls putting the digital flyer, **wareville-bank-account-qr.png**, i
 - A donator has shown proof of his transaction. It was made 3 days after he received the link. The account number in the transaction was not correct.
 - McSkidy put the digital flyer in the AWS S3 object named **wareville-bank-account-qr.png** under the bucket **wareville-care4wares**.
 - The link has not been altered.
+
 #### **Glitch Did It**
 Let’s use JQ to filter the log for events related to the **wareville-bank-account-qr.png** S3 object. The goal is to use the same elements to filter the log file using JQ and format the results into a table to make it more readable. According to McSkidy, the logs are stored in the `~/wareville_logs` directory.
 
@@ -55,7 +56,6 @@ Looking at the results, 5 logged events seem related to the **wareville-care4wa
 McSkidy is sure there was no user glitch in the system before. There is no one in the city hall with that name, either. The only person that McSkidy knows with that name is the hacker who keeps to himself. McSkidy suggests that we look into this anomalous user.
 
 #### **McSkidy Fooled Us?**
-
 McSkidy wants to know what this anomalous user account has been used for, when it was created, and who created it. We can focus our analysis on the following questions:
 
 - What event types are included in these log entries?
@@ -106,7 +106,6 @@ Based on the request parameters of the output, it can be seen that it was the us
 McSkidy is baffled by these results! She knows that she did not create the anomalous user and did not assign the privileged access. She also doesn’t recognise the IP address involved in the events and does not use a Mac OS; she only uses a Windows machine. All this information is different to the typical IP address and machine used by McSkidy, so she wants to prove her innocence and asks to continue the investigation.
 
 #### **Logs Don’t Lie**
-
 McSkidy suggests looking closely at the IP address and operating system related to all these anomalous events. 
 
 1. Let's use the following command below to continue with the investigation:
@@ -116,7 +115,6 @@ McSkidy suggests looking closely at the IP address and operating system related 
 Based on the command output, three user accounts (**mcskidy**, **glitch**, and **mayor_malware**) were accessed from the same IP address. The next step is to check each user and see if they always work from that IP.
 
 2. Let’s focus on each user and see if they always work from that IP. Enter the following command, and replace `PLACEHOLDER` with the username: `jq -r '["Event_Time","Event_Source","Event_Name", "User_Name","User_Agent","Source_IP"],(.Records[] | select(.userIdentity.userName=="PLACEHOLDER") | [.eventTime, .eventSource, .eventName, .userIdentity.userName // "N/A",.userAgent // "N/A",.sourceIPAddress // "N/A"]) | @tsv' cloudtrail_log.json | column -t -s $'\t'`
-
 
 3. We can focus our investigation on the following questions:
 	- Which IP does each user typically use to log into AWS?
@@ -143,8 +141,6 @@ From the command above, McSkidy explained that all INSERT queries from the RDS l
 As shown above, the Care4wares Fund received all the donations until it changed into a different account at a specific time. The logs also reveal who received the donations afterwards, given the account owner's name. With all these findings, McSkidy confirmed the assumptions made during the investigation of the S3 bucket since the sudden change in bank details was reflected in the database logs. The timeline of events collected by McSkidy explains the connection of actions conducted by the culprit:
 
 <img width="416" alt="THM AoC 2024 Day 7-13" src="https://github.com/user-attachments/assets/2b5e213d-2950-4cd5-b3ae-3a664777755d" />
-
-
 
 ### Answers
 
