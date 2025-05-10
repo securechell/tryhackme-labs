@@ -1,6 +1,7 @@
 # Day 23: You wanna know what happens to your hashes?
 
 **Learning Objectives**
+
 By finishing today’s task, you will learn about:
 - Hash functions and hash values
 - Saving hashed passwords
