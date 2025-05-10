@@ -59,7 +59,6 @@ In the upcoming tasks, we will examine how XXE works and how to exploit it.
 >XML External Entity injection (XXE) is a web security vulnerability that allows an attacker to interfere with an application's processing of XML data. It often allows an attacker to view files on the application server filesystem, and to interact with any back-end or external systems that the application itself can access.
 
 ### Practical 
-
 We will analyse an application that allows users to view and add products to their carts and perform the checkout activity. You can access the Wareville application hosted on `http://10.10.93.248`. This application allows users to request their Christmas wishes.
 
 **Flow of the Application**
@@ -98,7 +97,6 @@ Click *Open browser* and go to `http://10.10.93.248`.
 6. Go back to the browser and explore the URL. All the requests are intercepted and can be seen under Proxy -> HTTP history.
 
 ![image](https://github.com/user-attachments/assets/6f1c36eb-9400-45ce-a70f-5e25a62a4f2b)
-
 
 **What is Happening in the Backend?**
 
@@ -140,7 +138,6 @@ Now, let's perform the exploitation by repeating the request we captured earlier
 
 
 ### Time for Some Action
-
 Now that you've identified a vulnerability in the application, it's time to see it in action! McSkidy Software has tasked us with finding loopholes — let's take it a step further and assess the potential impact this vulnerability could have on the application.
 
 Earlier, we discovered a page accessible only by admins, which seems like an exciting target. What if we could use the vulnerability we've found to access sensitive information, like the wishes placed by the townspeople?
@@ -164,7 +161,6 @@ Try with some other wish numbers:
 After iterating through the wishes, we have proved the potential impact of the vulnerability, and anyone who leverages this could read the wishes submitted by the townspeople of Wareville.
 
 ### Conclusion
-
 It was confirmed that the application was vulnerable, and the developers were not at fault since they only wanted to give the townspeople something before Christmas. However, it became evident that bypassing security testing led to an application that did not securely handle incoming requests.
 
 As soon as the vulnerability was discovered, McSkidy promptly coordinated with the developers to implement the necessary mitigations. The following proactive approach helped to address the potential risks against XXE attacks:
