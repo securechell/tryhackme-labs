@@ -16,7 +16,6 @@ Log analysis is crucial to blue-teaming work. Analysing logs can quickly become 
 The first part of today's task is to investigate the attack on Frosty Pines Resort's Hotel Management System to see what it looks like to a blue teamer.
 
 ### Using ELK
-
 1. We will use **Kibana's Discover** interface to review Apache2 logs. To access this, simply click on the **hamburger menu** -> **Discover**.
 2. We will need to select the collection (group of logs) that is relevant to us. For this stage of Operation Blue, we will be reviewing the logs present within the "wareville-rails" collection. To select this collection, click on the dropdown on the left of the display.
 
@@ -61,7 +60,6 @@ To remove applied filters, simply click on the "**x**" alongside the filter, jus
 
 ![image](https://github.com/user-attachments/assets/74916624-f2c8-47d7-b5d0-c5718422b8ea)
 
-
 3. Let's look at the activity of the IP address **10.9.98.230**. We can click on the "clientip" field to see the IPs with the most values.
 
 4. Using the timeline at the top, we can see a lot of activity from this IP address took place between 11:30:00 and 11:35:00. This would be a good place to begin our analysis. Narrow the start date and time to "**Oct 1, 2024 @ 11:30:00.000**" and end date and time to "**Oct 1, 2024 @ 12:00:00.000**".
@@ -93,7 +91,6 @@ File upload vulnerabilities occur when a website doesn't properly handle the fil
 These can happen if a site doesn't properly secure its file upload functionality.
 
 ### Why Unrestricted File Uploads Are Dangerous
-
 Unrestricted file uploads can be particularly dangerous because they allow an attacker to upload any type of file. If the file's contents aren't properly validated to ensure only specific formats like PNG or JPG are accepted, an attacker could upload a malicious script, such as a PHP file or an executable, that the server might process and run. This can lead to code execution on the server, allowing attackers to take over the system.
 
 Examples of abuse through unrestricted file uploads include:
@@ -102,7 +99,6 @@ Examples of abuse through unrestricted file uploads include:
 - Uploading a web shell and browsing to it directly using a browser.
 
 ### Usage of Weak Credentials
-
 One of the easiest ways for attackers to break into systems is through weak or default credentials. This can be an open door for attackers to gain unauthorised access. Default credentials are often found in systems where administrators fail to change initial login details provided during setup. For attackers, trying a few common usernames and passwords can lead to easy access.
 Below are some examples of weak/default credentials that attackers might try:
 
@@ -127,7 +123,6 @@ A web shell typically gives the attacker a web-based interface to run commands. 
 Once an RCE vulnerability has been identified that can be exploited via file upload, we now need to create a malicious file that will allow remote code execution when uploaded. A malicious PHP file could be uploaded to exploit this vulnerability.
 
 ### Making the Most of It
-
 Once the vulnerability has been exploited and you now have access to the operating system via a web shell, there are many next steps you could take depending on:
 - **a)** what your goal is and
 - **b)** what misconfigurations are present on the system, which will determine exactly what we can do. Once you've gained access you could run Linux commands, e.g.: 
@@ -136,7 +131,6 @@ Once the vulnerability has been exploited and you now have access to the operati
 (etc etc)
 
 ### Practical
-
 Your task today is two-fold. First, you must access Kibana on `10.10.214.206:5601` to investigate the attack and answer the **blue** questions below. Then, you will proceed to Frosty Pines Resort's website at `http://frostypines.thm` and recreate the attack to answer the **red** questions and inform the developers what element of the website was vulnerable.
 
 **Note:**
@@ -162,7 +156,6 @@ Your task today is two-fold. First, you must access Kibana on `10.10.214.206:560
 - The other IP address *is* executing commands (can see `/shell.php?command=ls`, `/shell.php?command=id`...). Suggests this IP is the malicious one.
 
 ![image](https://github.com/user-attachments/assets/5e9a3f1c-ebc9-43fa-ad55-0a5d55b0bc96)
-
 
 3. **RED**: What is the contents of the flag.txt? **THM{Gl1tch_Was_H3r3}**
 - Execute `echo "10.10.214.206 frostypines.thm" >> /etc/hosts` within a terminal.
