@@ -45,22 +45,27 @@ Without good security checks, this kind of message tampering can lead to anythin
 ### Exploitation
 1. Navigate to `http://10.10.253.44`.
 2. Make sure Burp is set up on web browser. On Firefox, click icon in top right corner to turn Burp on:
+
 ![image](https://github.com/user-attachments/assets/4bc5a7ea-3254-445b-9016-56059d6eb973)
 
 3. Open Burp Suite, navigate to Proxy > Intercept > Proxy Settings. Scroll down to WebSocket interception rules and ensure the settings below are turned on.
+
 ![image](https://github.com/user-attachments/assets/96fb39de-cf68-43c9-80b6-0831a7d19580)
 
 4. Once done, close the window and turn Intercept on.
 5. Go back to the browser and click Track.
 6. Burp Proxy will intercept the WebSocket traffic, as shown below
+
 ![image](https://github.com/user-attachments/assets/201e250c-89a9-400f-bdd4-c9e56d175348)
 
 ![image](https://github.com/user-attachments/assets/c22ebf54-932f-458d-8431-52d5138a5d15)
 
 7. Change the value of the "userId" parameter from **5** to **8** and click the Forward button.
+
 ![image](https://github.com/user-attachments/assets/abb7d858-d96b-4921-aa17-20805cb747ba)
 
 8. Turn off Intercept, go to browser and check the Community Reports:
+
 ![image](https://github.com/user-attachments/assets/2aa50669-8c3b-41d1-9d41-0932832ff92f)
 
 ### Manipulating the Messaging
@@ -71,6 +76,7 @@ Following the successful identification of the WebSocket Message Manipulation vu
 3. Type a message in chat box, and Send.
 4. Return to Burp, change "sender" from 5 to 8, click Forward, the quickly turn Intercept off.
 5. Go to Community Reports and:
+
 ![image](https://github.com/user-attachments/assets/9f2d00d4-59ad-4f34-940b-d6faf068b002)
 
 ### Answers
