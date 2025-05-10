@@ -16,11 +16,9 @@ Detection gaps are usually for one of two main reasons:
 Blue teams constantly refine and improve their detection rules to close the gaps they experience due to the two reasons mentioned above. Let's take a look at how this can be done!
 
 ### Cyber Attacks and the Kill Chain
-
 All cyber attacks follow a fairly standard process, which is by the Unified Cyber Kill chain. As a blue teamer, it would be our dream to prevent all attacks at the start of the kill chain. But this is not possible. The goal is, therefore, to ensure we can detect the threat actor before the very last phase of goal execution.
 
 ### MITRE ATT&CK
-
 A popular framework for understanding the different techniques and tactics that threat actors perform through the kill chain is the MITRE ATT&CK framework. The framework is a collection of tactics, techniques, and procedures (TTPs) that have been seen to be implemented by real threat actors.
 
 However, the framework primarily discusses these TTPs in a theoretical manner. Even if we know we have a gap for a specific TTP, we don't really know how to test the gap or close it down. This is where the Atomics come in!
@@ -29,7 +27,6 @@ However, the framework primarily discusses these TTPs in a theoretical manner. E
 The **Atomic Red Team** library is a collection of red team test cases that are mapped to the MITRE ATT&CK framework. The library consists of simple test cases that can be executed by any blue team to test for detection gaps and help close them down. The library also supports automation, where the techniques can be automatically executed. However, it is also possible to execute them manually.
 
 ### Running an Atomic
-
 McSkidy suspects that the supposed attacker used the MITRE ATT&CK technique [T1566.001 Spearphishing](https://attack.mitre.org/techniques/T1566/001/) with an attachment. Let's recreate the attack emulation performed by the supposed attacker and then look for the artefacts created.
 
 1. Open up a PowerShell prompt as administrator. Enter the command `Get-Help Invoke-AtomicTest`.
@@ -66,7 +63,6 @@ Now that we have verified the dependencies, let us continue with the emulation.
 Based on the output, we can determine that the test was successfully executed. We can now analyse the logs in the Windows Event Viewer to find Indicators of Attack and Compromise.
 
 ### Detecting the Atomic
-
 Now that we have executed the T1566.001 Atomic, we can look for log entries that point us to this emulated attack. For this purpose, we will use the Windows Event Logs. This machine comes with [Sysmon](https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon) installed. System Monitor (Sysmon) provides us with detailed information about process creation, network connections, and changes to file creation time.
 
 1. To make it easier for us to pick up the events created for this emulation, we will first start with cleaning up files from the previous test by running the command `Invoke-AtomicTest T1566.001 -TestNumbers 1 -Cleanup`.
@@ -100,7 +96,6 @@ Now that we have executed the T1566.001 Atomic, we can look for log entries that
 Now that we know which artefacts were created during this spearphishing emulation, we can use them to create custom alerting rules. In the next section, we will explore this topic further.
 
 ### Alerting on the Atomic
-
 In the previous paragraph, we found multiple indicators of compromise through the Sysmon event log. We can use this information to create detection rules to include in our EDR, SIEM, IDS, etc. These tools offer functionalities that allow us to import custom detection rules. There are several detection rule formats, including Yara, Sigma, Snort, and more. Let's look at how we can implement the artefacts related to T1566.001 to create a custom Sigma rule.
 
 Two events contained possible indicators of compromise. Let's focus on the event that contained the `Invoke-WebRequest` command line:
@@ -121,7 +116,6 @@ The `detection` part is where the effective detection is happening. We can see c
 Now that Glitch has shown us his intentions, let's continue with his work and run an emulation for ransomware.
 
 ### Challenge
-
 As Glitch continues to prepare for SOC-mas, he decides to conduct an attack simulation that would mimic a ransomware attack across the environment. He is unsure of the correct detection metrics to implement for this test and asks you for help. Your task is to identify the correct atomic test to run that will take advantage of **a command and scripting interpreter**, conduct the test, and extract valuable artefacts that would be used to craft a detection rule.
 
 ### Answers
