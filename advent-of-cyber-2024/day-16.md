@@ -49,14 +49,17 @@ When the Glitch got hold of an initial account in Wareville's Azure tenant, he h
 	- Execute `az ad user list --filter "startsWith('wvusr-', displayName)"`
 
 3. You may observe that an unusual parameter was set to a specific account in the output. One of the users, **wvusr-backupware**, has its password stored in one of the fields:
+
 ![image](https://github.com/user-attachments/assets/9602ff41-26b9-482e-89a1-86b91c0ae839)
 
 4. When the Glitch saw this one, he immediately thought it could be the first step taken by the intruder to gain further access inside the tenant. However, he decided to continue the initial reconnaissance of users and groups. Now, let's continue by listing the groups.
 	- Execute `az ad group list`
+
 ![image](https://github.com/user-attachments/assets/a296b173-1c50-428c-89de-335688ba98ae)
 
 5. Given the output, it can be seen that a group named `Secret Recovery Group` exists. This is kind of an interesting group because of the description, so let's follow the white rabbit and list the members of this group.
 	- Execute `az ad group member list --group "Secret Recovery Group"`
+
 ![image](https://github.com/user-attachments/assets/42e4e690-bf8b-49c8-93d0-e93c1ff2fbbd)
 
 6. Given the previous output, it looks like everything makes a little sense now. All of the previous commands seem to point to the `wvusr-backupware` account. Since we have seen a potential set of credentials, let's jump to another user by clearing the current Azure CLI account session and logging in with the **new account**.
@@ -70,6 +73,7 @@ Since the `wvusr-backupware` account belongs to an interesting group, the Glit
 
 1. Let's see if a role is assigned to the Secret Recovery Group. We will be using the `--all` option to list all roles within the Azure subscription, and we will be using the `--assignee` option with the group's ID to render only the ones related to our target group.
 	- Execute `az role assignment list --assignee REPLACE_WITH_SECRET_RECOVERY_GROUP_ID --all`.
+
 ![image](https://github.com/user-attachments/assets/79aa4096-6f35-480b-96c1-b16dc2aa8179)
 
 The output seems slightly overwhelming, so let's break it down:
@@ -78,6 +82,7 @@ The output seems slightly overwhelming, so let's break it down:
 - Both entries have the same scope value, pointing to a Microsoft Key Vault resource, specifically on the `warevillesecrets` vault.
 
 Here's the definition of the roles based on the [Microsoft documentation](https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles):
+
 ![image](https://github.com/user-attachments/assets/76f32994-1c3a-4e35-b0fc-5af6e68c1835)
 
 After seeing both of these roles, McSkidy immediately realised everything! This configuration allowed the attacker to access the sensitive data they were protecting. Now that she knew this, she asked the Glitch to confirm her assumption.
@@ -85,16 +90,19 @@ After seeing both of these roles, McSkidy immediately realised everything! This 
 #### Azure Key Vault
 With McSkidy's guidance, the Glitch is now tasked to verify if the current account, **wvusr-backupware**, can access the sensitive data.
 1. Execute the following command to list the accessible key vaults: `az keyvault list`
+
 ![image](https://github.com/user-attachments/assets/5d036c41-6754-4389-9ad6-8bcb0e889d6c)
 
 The output above confirms the key vault discovered from the role assignments named `warevillesecrets`.
 
 2. Let's see if secrets are stored in this key vault.
+
 ![image](https://github.com/user-attachments/assets/bf690c50-ba1c-44a4-960c-f4918181c3ef)
 
 After executing the two previous commands, we confirmed that the **Reader** role allows us to view the key vault metadata, specifically the list of key vaults and secrets.
 
 3. Let's confirm whether the current user can access the contents of the discovered secret with the **Key Vault Secrets User** role. This can be done by executing the following command: `az keyvault secret show --vault-name warevillesecrets --name aoc2024`
+
 ![image](https://github.com/user-attachments/assets/a171173b-19a4-49d0-bdbe-edb2da45f42c)
 
 "Bingo!" the Glitch exclaimed as he saw the output above. McSkidy had confirmed her nightmare that a regular user could escalate their way into the secrets of Wareville.
