@@ -24,11 +24,13 @@ Here are some key capabilities you’ll see in this room:
 	- That's traffic! Yes, and this would take us to the truth about Mayor Malware.
 
 2. We already suspect that this machine is compromised. So, let’s narrow down our list so that it will only show traffic coming from the IP address of Marta May Ware’s machine. To do this, click inside the **Display Filter Bar** on the top, type `ip.src == 10.10.229.217`, and press **Enter**.
+
 ![image](https://github.com/user-attachments/assets/0e11d967-f9f5-4538-aca1-97c3918c6519)
 
 It’s still a lot, but at least we can now focus our analysis on outbound traffic.
 
 3. If you scroll down a bit, you will find some interesting packets, specifically those highlighted in yellow:
+
 ![image](https://github.com/user-attachments/assets/d62e86e6-b649-47c9-b07c-eb09da65e7c7)
 
 "Initial"? "Command"? "Exfiltrate"? That is sure to be something!
@@ -37,6 +39,7 @@ Let’s dive deeper.
 
 ### Message Received
 1. If you click on the `POST /initial` packet (Frame 440), more details will be shown on the bottom panes. These panes will show more detailed information about the packet frame. The bottom-left pane shows relevant details such as frame number (440), the destination IP (10.10.123.224), and more.
+
 ![image](https://github.com/user-attachments/assets/29a0318d-29ce-4dbf-92a6-c848bf80e102)
 
 You can expand each detail if you want, but the critical area to focus on is the lower-right view, the “Packet Bytes” pane.
@@ -46,6 +49,7 @@ This pane shows the bytes used in the communication in hexadecimal and ASCII cha
 The screenshot above shows something interesting: “I am in Mayor!”. This piece of text is likely relevant to us. This is a message sent by a payload that Mayor Malware has sent into Martha May Ware's computer, that is now communicating back to Mayor Malware (the C2 server) basically saying: I'm here.
 
 2. If we right-click on the `POST /initial` packet (Frame 440) and select Follow -> HTTP Stream, a new pop-up window will appear containing the back-and-forth HTTP communication relevant to the specific session.
+
 ![image](https://github.com/user-attachments/assets/5421513c-3799-45ee-a97b-4a6156e7fdf7)
 
 ![image](https://github.com/user-attachments/assets/cf7e5775-317e-4d6e-bd53-bcdef3bbb3f6)
@@ -57,6 +61,7 @@ The text highlighted in red is the message sent from the source (Martha) to the 
 _Perfect_, indeed, Mayor. We got you now!
 
 3. But let’s not stop here. Other interesting HTTP packets were sent to the same destination IP. If you follow the HTTP Stream for the `GET /command` packet (Frame 457), you’ll see a request to the same IP destination (just click arrow in Stream in bottom-right corner to go to Stream 2). 
+
 ![image](https://github.com/user-attachments/assets/49bd89e3-959f-4a16-9111-5fefc2aed80e)
 
 Interestingly, the reply ("whoami") that came back was a command commonly used in Windows and Linux systems to display the current user’s information. This communication suggests that the destination is attempting to gather information about the compromised system, a typical step during an early reconnaissance stage.
@@ -72,6 +77,7 @@ Usually, the reply from a C2 server contains the command, instructing the malici
 
 ### Exfiltrating the Package
 1. If we follow the HTTP Stream for the `POST /exfiltrate` packet (Frame 476) sent to the same destination IP, we will see a file exfiltrated to the C2 server. We can also find some clues inside this file.
+
 ![image](https://github.com/user-attachments/assets/0067b929-b8bc-4756-a1e9-79e35c698655)
 
 It seems a file called "credentials.txt" was sent by the payload, along with the message "AES ECB is your chance to decrypt the encrypted beacon with the key: 1234567890abcdef1234567890abcdef
@@ -80,6 +86,7 @@ It seems a file called "credentials.txt" was sent by the payload, along with the
 2. Check the rest of the PCAP, you’ll find that more interesting packets were captured. Let’s break these down and dive deeper into what we’ve uncovered.
 
 3. Click to see the next Stream. We can see that a message with an encrypted beacon (8724670c271adffd59447552a0ef3249) was sent and acknowledged.
+
 ![image](https://github.com/user-attachments/assets/d45e39a0-b510-483a-a5db-30f9e10b063c)
 
 4. Continue through the Streams. We can see that the same encrypted message is being sent (and acknowledged).
@@ -104,12 +111,14 @@ Since the beacon is now encrypted and you have the key to decrypt it, the [Cyber
 4. **Recipe:** Select the mode of encryption as ECB, and enter the decryption key (1234567890abcdef1234567890abcdef). Keep the other options as they are.
 5. **Input:** Enter the encrypted beacon (8724670c271adffd59447552a0ef3249) by copy-pasting the encrypted string here.
 6. **Output:** Once you have completed the above steps, click "Bake". Your encrypted string will be decrypted using the AES ECB decryption with the key you provided, and the output (flag) will be displayed.
+
 ![image](https://github.com/user-attachments/assets/11dfee05-6e12-4b93-aa8e-3824cd186203)
 
 
 ### Answers
 1. What was the first message the payload sent to Mayor Malware’s C2? (Hint: Look at the `POST /initial` packet.) **I am in Mayor!**
 2. What was the IP address of the C2 server? **10.10.123.224**
+
 ![image](https://github.com/user-attachments/assets/1b2772f5-15be-49e3-8d08-99956f30f04e)
 
 3. What was the command sent by the C2 server to the target machine? (Hint: Look at the `GET /command` packet). **whoami**
