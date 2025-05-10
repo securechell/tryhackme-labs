@@ -48,11 +48,13 @@ Before analysing our target, we need to learn and find a way to identify the ori
 
 1. Let's start by navigating to the file location in the **demo** folder on the machine's Desktop by right-clicking on the file named **demo** and clicking on Properties.
 2. We can observe that the file's extension is .exe, indicating that it is a Windows executable.
+
 ![image](https://github.com/user-attachments/assets/4a6cabcb-d165-4989-80b2-7bb0568377d1)
 
 3. Since it's a Windows file, we'll use **PEStudio**, a software designed to investigate potentially malicious files and extract information from them without execution. This will help us focus on the static analysis side of the investigation. Let's open PEstudio from the taskbar and then click on File -> Open File and select the file `demo.exe` located in `C:\Users\Administrator\Desktop\demo\demo.exe`.
 
 4. PEStudio will display information about the file, so let's start enumerating some of the most important aspects we can get from it. Using the left panel, we can navigate through different sections that will share different types of information about the file. In the general information output displayed when opening the file, we can see the hash of the file in the form of **SHA-256**, The architecture type, in this case, **x64**, the file type, and the signature of the language used to compile the executable, in this case, .**NET framework** that uses the C# language.
+
 ![image](https://github.com/user-attachments/assets/de7f392d-09c2-44d1-bee9-46f769f9fbc0)
 
 Let's focus on some critical data we can obtain. First, if we want to identify the file and provide evidence of its alteration, we need to take note of the file’s SHA-256 hash, as we mentioned above, as well as the hash of each section on the PE file. PE stands for Portable Executable, and it's the format in which Windows executables are arranged.
@@ -84,11 +86,13 @@ As the screenshot above shows, ILSpy can provide much information, like metadata
 7. Analysis indicates the binary will download a PNG file to the user's Desktop from the URL: `http://10.10.10.10/img/tryhackme_connect.png`. Let's execute the file and see if this is true: Double-click on the `demo.exe` file.
 
 8. Once the binary starts, wait for the text "`Hello THM DEMO Binary`" to appear, then press **Enter** to download the file.
+
 ![image](https://github.com/user-attachments/assets/0b01f52d-65a2-40aa-ad70-d4404690ed99)
 
 ![image](https://github.com/user-attachments/assets/8b4e0482-b328-4e13-8416-b72d75001d71)
 
 9. After executing the file, we can observe that `thm-demo` was downloaded to the Desktop, and the messages print to the screen as expected. Also, the downloaded file is executed and opened using the default app for PNG Paint. Excellent, we successfully Reverse-Engineered the flow of the code.
+
 ![image](https://github.com/user-attachments/assets/89505671-263b-4040-8b82-1ec1989260ef)
 
 ### Practical
@@ -98,14 +102,17 @@ Now that we have some practice, join McSkidy and help investigate the alerts com
 To answer the question, you will need to reverse the application `WarevilleApp.exe`, located at `C:\Users\Administrator\Desktop\`.
 
 1. Find out the Properties of the WarevilleApp file. We can see it's a Windows executable (.exe).
+
 ![image](https://github.com/user-attachments/assets/455f7e61-c133-49f4-86b8-f9abb732d012)
 
 2. We'll use PEStudio to investigate. Open PEstudio and select the file `WarevilleApp.exe`.
 
 3. We can see some general info about the file.
+
 ![image](https://github.com/user-attachments/assets/bdcf3885-9043-4058-ac69-0cd3e92f6147)
 
 4. Open ILSpy and select `WarevilleApp.exe`. references. Go to FancyApp -> Program -> Main.
+
 ![image](https://github.com/user-attachments/assets/0348ecc3-234f-479c-b4ab-61462b5aa9da)
 
 5. The code can be analysed.
@@ -115,6 +122,7 @@ To answer the question, you will need to reverse the application `WarevilleApp.
 	- Go to FancyApp -> Form1
 	- Scroll down looking at each function.
 	- The one that says "`DownloadAndExecuteFile`:
+
 ![image](https://github.com/user-attachments/assets/577c0180-6a7e-42c2-b1c0-d707a97fc2b5)
 
 2. Once you execute the `WarevilleApp.exe`, it downloads another binary to the Downloads folder. What is the name of the binary? **explorer.exe**
@@ -124,6 +132,7 @@ To answer the question, you will need to reverse the application `WarevilleApp.
 3. What domain name is the one from where the file is downloaded after running WarevilleApp.exe? **mayorc2.thm**
 	- In ILSpy go to FancyApp -> Form1
 	- Look under `DownloadAndExecuteFile()`. The domain name is there.
+
 ![image](https://github.com/user-attachments/assets/e22780f3-e452-4117-8dd6-d1032d3a307a)
 
 4. The stage 2 binary is executed automatically and creates a zip file comprising the victim's computer data; what is the name of the zip file? (Hint: Visit the Pictures folder to check the zip file.) **CollectedFiles.zip**
@@ -133,4 +142,5 @@ To answer the question, you will need to reverse the application `WarevilleApp.
 	- In ILSpy open `explorer.exe`
 	- Go to FileCollector -> Program -> UploadFileToServer
 	- The domain name shown is the C2 server
+
 ![image](https://github.com/user-attachments/assets/7a181a5f-20bc-4ff0-b5e5-3374ea5ca77f)
