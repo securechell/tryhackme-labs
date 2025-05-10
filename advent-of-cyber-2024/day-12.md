@@ -41,30 +41,36 @@ We will perform a sample transaction inside the browser. This will generate mult
 
 1. Our current balance is **$1000**. We will send **$500** to another bank account with the **account number 111**, and while doing that, all our requests will be captured in Burp Suite.
 2. Click the **Transfer** button. You will see the following message indicating that the amount has been transferred:
+
 ![image](https://github.com/user-attachments/assets/a2fcc628-27b5-4c4d-adcd-9b206fbbb43c)
 
 3. Let's review the fund transfer HTTP POST request logged in the Burp Suite's HTTP history option under the Proxy tab.
+
 ![image](https://github.com/user-attachments/assets/e90b7864-f1ba-4f52-99ec-4fc2cbc65f17)
 
 This picture shows that the `/transfer` endpoint accepts a POST request with parameters `account_number` and `amount`. The Burp Suite tool has a feature known as **Repeater** that allows you to send multiple HTTP requests. We will use this feature to duplicate our HTTP POST request and send it multiple times to exploit the race condition vulnerability.
 
 4. Right-click on the POST request and click on Send to Repeater.
 5. Navigate to the Repeater tab, where you will find the POST request that needs to be triggered multiple times. We can change the `account_number`, from `111`, and the `amount` value from `500` to any other value in the request as well, as shown below:
+
 ![image](https://github.com/user-attachments/assets/a81aa03b-28da-428e-9b17-3e6031be79f0)
 
 6. Place the mouse cursor inside the request inside the Repeater tab in Burp Suite and press **Ctrl+R** to duplicate the tab. Press Ctrl+R ten times to have 10 duplicate requests ready for testing.
+
 ![image](https://github.com/user-attachments/assets/6e836d1c-4b81-4696-9979-0f5ce70ab907)
 
 Now that we have 10 requests ready, we want to send them simultaneously. While one option is to manually click the Send button in each tab individually, we aim to send them all in parallel.
 
 7. Click the **+** icon next to Request #10 and select Create tab group. This will allow us to group all the requests together for easier management and execution in parallel.
 8. A dialogue box will appear asking you to name the group and select the requests to include. Name the group "funds", select all the requests, and click Create.
+
 ![image](https://github.com/user-attachments/assets/c3ed3caa-55f5-4e3d-9de0-d37f5a91936b)
 
 Now, we are ready to launch multiple copies of our HTTP POST requests simultaneously to exploit the race condition vulnerability.
 
 9. Select **Send group in parallel (last-byte sync)** in the dropdown next to the Send button. Once selected, the Send button will change to **Send group (parallel)**. Click to send all the duplicated requests in our tab group at the same time.
 10. Once all the requests have been sent, navigate to the Tester account in the browser and check the current balance. You will notice that the tester's balance is negative because we successfully transferred more funds than were available in the account, exploiting the race condition vulnerability.
+
 ![image](https://github.com/user-attachments/assets/fcb3a861-39d3-47a2-be49-b0537cfedc00)
 
 By duplicating ten requests and sending them in parallel, we are instructing the system to make ten simultaneous requests, each deducting $500 from the Tester account and sending it to account 111. In a correctly implemented system, the application should have processed the first request, locked the database, and processed the remaining requests individually. However, due to the race condition, the application handles these requests abruptly, resulting in a negative balance in the tester account and an inflated balance in account 111.
@@ -84,6 +90,7 @@ The developer did not properly handle concurrent requests in the bank's applicat
 - In browser sign in with credentials (account number: 101 and password: glitch).
 - Transfer $1000 to account 111.
 - Here's the request in Burp Suite:
+
 ![image](https://github.com/user-attachments/assets/a1b37724-be81-4b55-ab2e-d6fef47f2509)
 
 - Send the request to Repeater.
