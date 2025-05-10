@@ -1,6 +1,7 @@
 # Day 14: Even if we're horribly mismanaged, there'll be no sad faces on SOC-mas!
 
 **Learning Objectives**
+
 In today's task you will learn about:
 - Self-signed certificates
 - Man-in-the-middle attacks
@@ -8,7 +9,6 @@ In today's task you will learn about:
 
 
 ### Certified to Sleigh
-
 A **certificate** is composed of:
 
 - **Public key**: At its core, a certificate contains a public key, part of a pair of cryptographic keys: a public key and a private key. The public key is made available to anyone and is used to encrypt data.
@@ -16,7 +16,6 @@ A **certificate** is composed of:
 - **Metadata**: Along with the key, it includes metadata that provides additional information about the certificate holder (the website) and the certificate. You usually find information about the Certificate Authority (CA), subject (information about the website, e.g.` www.meow.thm`), a uniquely identifiable number, validity period, signature, and hashing algorithm.
 
 ### Sign Here, Trust Me
-
 #### So what is a Certificate Authority (CA)?
 A CA is a trusted entity that issues certificates; for example, GlobalSign, Let’s Encrypt, and DigiCert are very common ones. The browser trusts these entities and performs a series of checks to ensure it is a trusted CA. Here is a breakdown of what happens with a certificate:
 
@@ -49,14 +48,17 @@ To achieve this, let’s add the following line to the `/etc/hosts` file on th
 
 1. In Terminal type: `echo "10.10.16.22 gift-scheduler.thm" >> /etc/hosts`.
 2. Execute `cat /etc/hosts` to verify that the line above was added to the file:
+
 ![image](https://github.com/user-attachments/assets/86dc137b-9e84-48ce-8eb4-43d32df4df94)
 
 Now, Mayor Malware can navigate to the Gift Scheduler website without leaving a trace on Wareville’s DNS logs.
 
 3. Open the Firefox browser and navigate to `https://gift-scheduler.thm`. We’ll be presented with a warning page. Click the Advanced button to expand the warning’s details.
+
 ![image](https://github.com/user-attachments/assets/f1376269-6692-44b0-8bd0-0b8676089155)
 
 4. Click View Certificate - a new tab opens with the certificate details.
+
 ![image](https://github.com/user-attachments/assets/9fa11992-33a8-4810-bcb3-39378f752375)
 
 Mayor Malware can’t believe his luck! This is evidence that the Glitch was speaking the truth: the Gift Scheduler web server uses a self-signed certificate.
@@ -75,9 +77,11 @@ To sniff the elves’ traffic, the next step will be to start a proxy on his mac
 7. Open the Proxy Settings to set a new listener on our AttackBox IP address.
 	- Click Add; Burp Suite will prompt us for the new listener’s configuration.
 	- Set the listening port to 8080 and toggle the Specific address option. The box next to it will automatically specify the IP address of our AttackBox, (`10.10.123.222`). Click OK to apply the configuration.
+
 ![image](https://github.com/user-attachments/assets/6a8faf1a-15ff-4255-9ac4-e49bfcafe398)
 
 	- The previous settings window will get displayed and we can see that the new listener has been added under the proxy listeners list:
+
 ![image](https://github.com/user-attachments/assets/b920c10b-b1ba-4ed8-bd0a-1e8ed4a90815)
 
 Mayor Malware rubs his hands together gleefully: as we can see in the screenshot above, Burp Suite already comes with a self-signed certificate. The users will be prompted to accept it and continue, and Mayor Malware knows they will do it out of habit, without even thinking of verifying the certificate origin first. The G-Day disruption operation will go off without a hitch!
@@ -89,18 +93,21 @@ Mayor Malware has a wonderful idea to achieve this: he will set his own machine 
 
 1. Add another line to the AttackBox’s `/etc/hosts` file by typing the following command in the Terminal: `echo "10.10.123.222 wareville-gw" >> /etc/hosts`. This will divert all of Wareville’s traffic, usually routed through the legitimate Wareville Gateway, to Mayor Malware’s machine, effectively putting him *“In The Middle”* of the requests.
 2. As a last step, we must start a custom script to simulate the users’ requests to the Gift Scheduler. On the AttackBox, the script can be found in `/root/Rooms/AoC2024/Day14`. **Note:** Keep the script running so that new user requests will constantly be captured in Burp Suite.
+
 ![image](https://github.com/user-attachments/assets/c5e5d67d-40fd-4930-8e7a-4bf1af5cdcd6)
 
 #### Pwn the Scheduler
 At last, everything is in place. Mayor Malware’s evil plan can finally commence!
 
 1. Return to the open Burp Suite window and click on the HTTP History tab.
+
 ![image](https://github.com/user-attachments/assets/366730f6-3d26-4ada-84ae-c07301188d4d)
 
 There is a triumphant gleam in Mayor Malware’s eyes while he stares intently at the web requests pouring on his screen. He can finally see them: the POST requests containing clear-text credentials for the Gift Scheduler website! Now, he only needs to wait and find the password to a privileged account.
 
 ### Answers
 1. What is the name of the CA that has signed the Gift Scheduler certificate? **THM**.
+
 ![image](https://github.com/user-attachments/assets/69738699-3707-4a23-a8dd-8c69658890d6)
 
 2. Look inside the POST requests in the HTTP history. What is the password for the *snowballelf* account? **c4rrotn0s3**.
