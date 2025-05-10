@@ -1,7 +1,6 @@
 # Day 9: Nine o'clock, make GRC fun, tell no one.
 
 ### Introduction to GRC
-
 Governance, Risk, and Compliance (GRC) plays a crucial role in any organisation to ensure that their security practices align with their personal, regulatory, and legal obligations. Although in general good security practices help protect a business from suffering a breach, depending on the sector in which an organisation operates, there may be external security regulations that it needs to adhere to.
 
 When you run a large organisation with multiple different teams, how do you stay on top of all these regulations and ensure that good security is applied by all teams? This is where **GRC** comes in. They play a crucial role in understanding external security standards, translating them into internal standards, and then ensuring that they are applied by all teams to help reduce the organisation's risk to an acceptable level. Let's take a quick look at the three functions of GRC.  
@@ -22,6 +21,7 @@ For McSkidy and Glitch, assessing the risks of each eDiscovery company helps the
 
 #### Performing a Risk Assessment
 We will work through the process of completing a **risk register**. A risk register tracks the progress of risk mitigation and all open risks. An example of such a risk register is shown below:
+
 ![image](https://github.com/user-attachments/assets/e449b873-5e3a-456b-b161-a2183d722db4)
 
 - **Identification of Risks**
@@ -68,6 +68,7 @@ This is important because one weak link in the chain can affect everyone. It is 
 
 ### Procuring a Partner
 Let's put this knowledge to the test!
+
 ![image](https://github.com/user-attachments/assets/12f4db42-9d71-49ed-b534-ae7eb0dae5b4)
 
 
