@@ -21,6 +21,7 @@ Let us say that McSkidy wants to ensure that all users within Wareville's SOC 
 
 1. Go to Windows Icon -> Windows System -> Run. Using the Run window, open Group Policy Management from your server by typing `gpmc.msc`.
 2. Right-click your domain and select **"Create a GPO in this domain, and Link it here"**. Name the new GPO **"Password Policy"**.
+
 ![image](https://github.com/user-attachments/assets/a88da900-7d80-41f5-a679-b6be5a357987)
 
 3. Edit the GPO by navigating to **Computer Configuration -> Policies -> Windows Settings -> Security Settings -> Account Policies -> Password Policy**.
@@ -47,6 +48,7 @@ Reviewing Group Policy Objects (GPOs) is a great investigation step.
 Windows comes packaged with the Event Viewer. This invaluable repository stores a record of system activity, including security events, service behaviours, and so forth.
 
 For example, within the "Security" tab of Event Viewer, we can see the history of user logins, attempts and logoffs. All categories of events are given an event ID. The table below provides notable event IDs for today's task.
+
 ![image](https://github.com/user-attachments/assets/fd586111-ae08-4d80-996b-605d2fca9b2d)
 
 ### User Auditing
@@ -74,9 +76,11 @@ Your task for today is to investigate WareVille's SOC-mas Active Directory cont
 	- Go to Event Viewer -> Windows Logs -> Security tab.
 	- On right-hand side, under Actions click Find.
 	- Enter "Glitch_Malware" in textbox. Click Find Next, then Cancel.
+
 ![image](https://github.com/user-attachments/assets/4c314403-ef1b-4109-a3d9-222873441e3d)
 
 We can see the events associated with the username Glitch_Malware:
+
 ![image](https://github.com/user-attachments/assets/56813f7e-7b6a-4c57-b87a-d43c8ccebdf9)
 
 ![image](https://github.com/user-attachments/assets/34a8ca94-ab62-42a3-a89c-9fec6385a499)
@@ -84,11 +88,13 @@ We can see the events associated with the username Glitch_Malware:
 We need to find when he last logged in.
 - Go to Find -> Find Next again. Run through until you see Logon in the Task Category.
 - Seems to be "11/7/2024".
+
 ![image](https://github.com/user-attachments/assets/8296566d-6a0d-4a40-94ee-f3704b6942da)
 
 This is the American MM/D/YYYY format. As DD/DM/YYYY the answer is:  **07/11/2024**.
 
 2. What event ID shows the login of the Glitch_Malware user? **4624**.
+
 ![image](https://github.com/user-attachments/assets/0cd01184-97a2-46f6-aec7-15c6a5d0a532)
 
 (Don't go with Special Logon in Task Category, look for a regular Logon)
@@ -97,21 +103,23 @@ This is the American MM/D/YYYY format. As DD/DM/YYYY the answer is:  **07/11/202
 	- Go to File Explorer -> This PC -> Local Disk (C:) -> Users -> Administrator.
 	- Click View (menu bar) and tick Hidden Items.
 	- From Administrator got to App Data -> Roaming -> Microsoft -> Windows -> PowerShell -> PSReadLine -> ConsoleHost_history
+
 ![image](https://github.com/user-attachments/assets/0642f11b-6947-4ae7-94fd-1b9d2bf832de)
 
-	- Answer: **Get-ADUser -Filter * -Properties MemberOf | Select-Object Name**
+- Answer: **Get-ADUser -Filter * -Properties MemberOf | Select-Object Name**
 
 4. Look in the PowerShell log file located in Application and Services Logs -> Windows PowerShell. What was Glitch_Malware's set password?
 	- Go to Event Viewer.
 	- In Windows PowerShell go to Find and look for "password".
 	- Run through until you find an event associated with Glitch_Malware
+
 ![image](https://github.com/user-attachments/assets/0e0fad99-744b-496b-91e0-5e4905b8dbc6)
 
-	- Answer: **SuperSecretP@ssw0rd!**
+- Answer: **SuperSecretP@ssw0rd!**
 
 5. Review the Group Policy Objects present on the machine. What is the name of the installed GPO?
 	- Go to PowerShell
 	- Enter `Get-GPO -All`. Scroll down looking for anything suspicious!
 ![image](https://github.com/user-attachments/assets/2808bafb-73cb-4ae9-8e4c-7decaf489208)
 
-	- Answer: **Malicious GPO - Glitch_Malware Persistence**.
+- Answer: **Malicious GPO - Glitch_Malware Persistence**.
